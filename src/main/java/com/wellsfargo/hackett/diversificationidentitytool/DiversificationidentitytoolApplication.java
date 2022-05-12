@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DiversificationidentitytoolApplication {
+public class DiversificationIdentityToolApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DiversificationidentitytoolApplication.class, args);
-	}
+  public static void main(String[] args) {
 
+    SpringApplication.run(DiversificationIdentityToolApplication.class, args);
+  }
 }
