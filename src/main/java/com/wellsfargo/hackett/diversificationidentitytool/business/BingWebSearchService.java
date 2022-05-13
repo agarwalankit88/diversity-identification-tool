@@ -1,5 +1,7 @@
 package com.wellsfargo.hackett.diversificationidentitytool.business;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wellsfargo.hackett.diversificationidentitytool.model.dto.BingWebSearchResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,7 @@ public class BingWebSearchService {
     @Value("${hackett-bing.search.api.endpoint}")
     String endpoint;
 
-    public SearchResults SearchWeb(String searchQuery) throws Exception {
+    public BingWebSearchResponse searchWeb(String searchQuery) throws Exception {
         // Construct URL of search request (endpoint + query string)
         URL url = new URL(endpoint + "?q=" + URLEncoder.encode(searchQuery, "UTF-8"));
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
@@ -45,8 +47,8 @@ public class BingWebSearchService {
         }
         stream.close();
         scanner.close();
-
-        return results;
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(results.getJsonResponse(), BingWebSearchResponse.class);
     }
 
 }

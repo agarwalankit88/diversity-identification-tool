@@ -13,11 +13,21 @@
 </div>
 <h1 style="text-align: center">Diversification Identity Result</h1>
 <p><b>Search Input</b>
-    <p th:text="${requestModel.inputText}"/>
+<p th:text="${requestModel.inputText}"/>
 </p>
 <p><b>Search Result</b>
-    <p th:text="${requestModel.outputText}"/>
-</p>
+<div>
+    <table>
+        <tr th:each="element : ${responseModel.response}">
+            <td th:text="${element.key}">keyvalue</td>
+            <table>
+                <tr th:each="anews : ${element.value}">
+                    <td th:text="${anews}">Some name</td>
+                </tr>
+            </table>
+        </tr>
+    </table>
+</div>
 <a href="/diversificationidentity/home">Search another text</a>
 </body>
 </html>
