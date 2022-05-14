@@ -8,10 +8,12 @@ public class DiversificationResponse {
     private Map<String, List<String>> response;
 
     public Map<String, List<String>> getResponse() {
+
         return response;
     }
 
     public void setResponse(Map<String, List<String>> response) {
+
         this.response = response;
     }
 }
