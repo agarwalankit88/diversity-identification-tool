@@ -40,10 +40,16 @@ public class ScrapingService {
 
     public List<String> scrapWebPage(String baseURL) {
 
-        //Optional.ofNullable(baseURL).map(this::getDocument).
-
         List<String> leadershipList = new ArrayList<>();
-        Document document = getDocument(baseURL);
+        Optional.ofNullable(baseURL).map(this::getDocument).ifPresent(document -> {
+            standardKeywords.stream().forEach(keyword -> {
+                Optional.ofNullable(getElements(document, keyword)).
+                        ifPresent(elements -> elements.stream().forEach(element -> leadershipList.add(element.html())));
+            });
+
+        });
+
+        /*Document document = getDocument(baseURL);
         if (document != null) {
             for (String keyword : standardKeywords) {
                 Elements elements = getElements(document, keyword);
@@ -53,7 +59,7 @@ public class ScrapingService {
                     }
                 }
             }
-        }
+        }*/
         return leadershipList;
     }
 
