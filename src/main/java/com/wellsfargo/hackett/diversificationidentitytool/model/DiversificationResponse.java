@@ -1,19 +1,19 @@
 package com.wellsfargo.hackett.diversificationidentitytool.model;
 
-import java.util.List;
 import java.util.Map;
 
 public class DiversificationResponse {
 
-    private Map<String, List<String>> response;
+    private Map<String, SourceData> response;
 
-    public Map<String, List<String>> getResponse() {
+    public Map<String, SourceData> getResponse() {
 
         return response;
     }
 
-    public void setResponse(Map<String, List<String>> response) {
+    public void setResponse(Map<String, SourceData> response) {
 
         this.response = response;
     }
+
 }

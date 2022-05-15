@@ -1,22 +1,16 @@
 package com.wellsfargo.hackett.diversificationidentitytool.business;
 
 import com.wellsfargo.hackett.diversificationidentitytool.model.DiversificationResponse;
+import com.wellsfargo.hackett.diversificationidentitytool.model.SourceData;
 import com.wellsfargo.hackett.diversificationidentitytool.model.dto.BingWebSearchResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jsoup.select.Evaluator;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Service
@@ -27,11 +21,10 @@ public class ScrapingService {
     public DiversificationResponse scrapeSearchResults(BingWebSearchResponse bingWebSearchResponse) {
 
         DiversificationResponse response = new DiversificationResponse();
-        AtomicInteger count = new AtomicInteger(1);
         Optional.ofNullable(bingWebSearchResponse).map(bingWebSearchResponse1 -> bingWebSearchResponse1.getWebPages().getValue())
                 .map(values -> {
-                    Map<String, List<String>> map = new HashMap<>();
-                    values.forEach(value -> map.put("url" + count.getAndIncrement(), scrapWebPage(value.getUrl())));
+                    Map<String, SourceData> map = new TreeMap<>();
+                    values.forEach(value -> map.put(value.getUrl(), new SourceData(value.getSnippet(), scrapWebPage(value.getUrl()))));
                     response.setResponse(map);
                     return null;
                 });

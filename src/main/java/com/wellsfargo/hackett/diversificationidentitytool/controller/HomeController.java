@@ -13,6 +13,6 @@ public class HomeController {
   public String homePage(Model model) {
 
     model.addAttribute("requestModel", new DiversificationRequest());
-    return "index";
+    return "diversify";
   }
 }

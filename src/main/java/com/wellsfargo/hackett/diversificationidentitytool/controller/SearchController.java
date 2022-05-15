@@ -34,7 +34,7 @@ public class SearchController {
 
         model.addAttribute("requestModel", diversificationRequest);
         model.addAttribute("responseModel", diversificationResponse);
-        return "result";
+        return "diversify_result";
     }
 
 }
