@@ -25,7 +25,7 @@ public class Item implements Serializable
     @JsonProperty("answerType")
     private String answerType;
     @JsonProperty("resultIndex")
-    private Integer resultIndex;
+    private Double resultIndex;
     @JsonProperty("value")
     private Value__1 value;
     @JsonIgnore
@@ -43,12 +43,12 @@ public class Item implements Serializable
     }
 
     @JsonProperty("resultIndex")
-    public Integer getResultIndex() {
+    public Double getResultIndex() {
         return resultIndex;
     }
 
     @JsonProperty("resultIndex")
-    public void setResultIndex(Integer resultIndex) {
+    public void setResultIndex(Double resultIndex) {
         this.resultIndex = resultIndex;
     }
 

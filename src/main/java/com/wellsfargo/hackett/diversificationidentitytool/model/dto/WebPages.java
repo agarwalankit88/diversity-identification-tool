@@ -27,7 +27,7 @@ public class WebPages implements Serializable
     @JsonProperty("webSearchUrl")
     private String webSearchUrl;
     @JsonProperty("totalEstimatedMatches")
-    private Integer totalEstimatedMatches;
+    private Double totalEstimatedMatches;
     @JsonProperty("value")
     private List<Value> value = null;
     @JsonProperty("someResultsRemoved")
@@ -47,12 +47,12 @@ public class WebPages implements Serializable
     }
 
     @JsonProperty("totalEstimatedMatches")
-    public Integer getTotalEstimatedMatches() {
+    public Double getTotalEstimatedMatches() {
         return totalEstimatedMatches;
     }
 
     @JsonProperty("totalEstimatedMatches")
-    public void setTotalEstimatedMatches(Integer totalEstimatedMatches) {
+    public void setTotalEstimatedMatches(Double totalEstimatedMatches) {
         this.totalEstimatedMatches = totalEstimatedMatches;
     }
 

@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 @Service
 public class ScrapingService {
 
-    private static final List<String> standardKeywords = Arrays.asList("Leadership", "Executive", "CEO", "CTO", "Chief", "Directors", "Board");
+    private static final List<String> leaderShipStandardKeywords = Arrays.asList("Leadership", "Executive", "CEO", "CTO", "Chief", "Directors", "Board");
 
     public DiversificationResponse scrapeSearchResults(BingWebSearchResponse bingWebSearchResponse) {
 
@@ -24,21 +24,25 @@ public class ScrapingService {
         Optional.ofNullable(bingWebSearchResponse).map(bingWebSearchResponse1 -> bingWebSearchResponse1.getWebPages().getValue())
                 .map(values -> {
                     Map<String, SourceData> map = new TreeMap<>();
-                    values.forEach(value -> map.put(value.getUrl(), new SourceData(value.getSnippet(), scrapWebPage(value.getUrl()))));
+                    values.forEach(value -> map.put(value.getUrl(),
+                            new SourceData(value.getSnippet(), scrapWebPage(value.getUrl(),
+                                    bingWebSearchResponse.getQueryContext().getOriginalQuery()))));
                     response.setResponse(map);
                     return null;
                 });
         return response;
     }
 
-    public List<String> scrapWebPage(String baseURL) {
+    public List<String> scrapWebPage(String baseURL, String inputText) {
 
         List<String> leadershipList = new ArrayList<>();
         Optional.ofNullable(baseURL).map(this::getDocument).ifPresent(document -> {
-            standardKeywords.stream().forEach(keyword -> {
+            leaderShipStandardKeywords.stream().forEach(keyword -> {
                 Optional.ofNullable(getElements(document, keyword)).
                         ifPresent(elements -> elements.stream().forEach(element -> leadershipList.add(element.html())));
             });
+            /*Optional.ofNullable(getElements(document, inputText)).
+                    ifPresent(elements -> elements.stream().forEach(element -> leadershipList.add(element.html())));*/
 
         });
 

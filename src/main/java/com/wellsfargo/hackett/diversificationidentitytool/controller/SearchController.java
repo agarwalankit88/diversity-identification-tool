@@ -11,6 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.thymeleaf.util.StringUtils;
+
+import java.util.Optional;
 
 @Controller
 public class SearchController {
@@ -25,7 +28,10 @@ public class SearchController {
 
     @PostMapping("/search")
     public String search(@ModelAttribute DiversificationRequest diversificationRequest, Model model) throws Exception {
-
+        if(StringUtils.isEmpty(diversificationRequest.getInputText())){
+            model.addAttribute("requestModel", diversificationRequest);
+            return "diversify";
+        }
         String inputText = diversificationRequest.getInputText().replaceAll(" ", "+");
         DiversificationResponse diversificationResponse = diversificationIdentityService.getDiversityResults(inputText);
 

@@ -22,14 +22,17 @@
 </div>
 <div class="container mt-5">
     <h2 align="center">Identify diversity led businesses</h2>
-    <form style="text-align: center;" th:action="@{/search}" th:object="${requestModel}" method="post">
-        <input type="text" name="keyword" th:field="*{inputText}" placeholder="Find by leaders,buyers and offerings"
+    <form name="Form" style="text-align: center;" th:action="@{'/search'}" th:object="${requestModel}" method="post">
+        <input type="text" name="keyword" th:field="*{inputText}" placeholder="Find by leadership,buyers and products"
                size="50">
         <button id="submit" type="submit" class="btn btn-info" onclick="getElementById('waiting')">Search</button>
-        <button type="submit" class="btn btn-info">Reset</button>
+        <button onclick="window.location.href='/diversificationidentity/home'" type="reset" class="btn btn-info">Reset
+        </button>
     </form>
 </div>
-<div style="text-align: center;padding-top: 25px;" id="waiting">Please wait while we fetch you the best results...</div>
+<div id="waiting">
+    <p style="text-align: center;padding-top: 25px;">Please wait while we fetch you the best results...</p>
+</div>
 <script type="text/javascript">
     const div = document.getElementById("waiting");
     div.hidden = true;
