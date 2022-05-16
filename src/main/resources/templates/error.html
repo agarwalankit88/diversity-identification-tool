@@ -22,23 +22,11 @@
 </div>
 <div class="container mt-5">
     <h2 align="center">Identify Diversity Owned/Led Businesses</h2>
-    <form name="Form" style="text-align: center;" th:action="@{'/search'}" th:object="${requestModel}" method="post">
-        <input type="text" name="keyword" th:field="*{inputText}" placeholder="Find by leadership,buyers and products"
-               size="50">
-        <button id="submit" type="submit" class="btn btn-info" onclick="getElementById('waiting')">Search</button>
-        <button onclick="window.location.href='/diversificationidentity/home'" type="reset" class="btn btn-info">Reset
-        </button>
-    </form>
+    
+    <div>
+    	<p>The site is currently under maintenance. Please try again later. </p>
+    	<p>To access home page, please click <a href="/diversificationidentity/home">Home</a></p>
+    </div>
 </div>
-<div id="waiting">
-    <p style="text-align: center;padding-top: 25px;">Please wait while we fetch you the best results...</p>
-</div>
-<script type="text/javascript">
-    const div = document.getElementById("waiting");
-    div.hidden = true;
-    document.getElementById("submit").addEventListener("click", function () {
-        div.hidden = !div.hidden;
-    });
-</script>
 </body>
 </html>

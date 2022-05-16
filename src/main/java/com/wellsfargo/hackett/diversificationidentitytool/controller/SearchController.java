@@ -1,11 +1,7 @@
 package com.wellsfargo.hackett.diversificationidentitytool.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.wellsfargo.hackett.diversificationidentitytool.business.DiversificationIdentityService;
-import com.wellsfargo.hackett.diversificationidentitytool.dataaccess.EventsDAO;
-import com.wellsfargo.hackett.diversificationidentitytool.model.DiversificationRequest;
-import com.wellsfargo.hackett.diversificationidentitytool.model.DiversificationResponse;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,34 +9,47 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.thymeleaf.util.StringUtils;
 
-import java.util.Optional;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.wellsfargo.hackett.diversificationidentitytool.business.DiversificationIdentityService;
+import com.wellsfargo.hackett.diversificationidentitytool.dataaccess.EventsDAO;
+import com.wellsfargo.hackett.diversificationidentitytool.model.DiversificationRequest;
+import com.wellsfargo.hackett.diversificationidentitytool.model.DiversificationResponse;
 
 @Controller
 public class SearchController {
 
-    private static final Gson GSON = new GsonBuilder().create();
+	private static final Gson GSON = new GsonBuilder().create();
 
-    @Autowired
-    EventsDAO eventsDAO;
+	private static final Log LOG = LogFactory.getLog(SearchController.class);
 
-    @Autowired
-    DiversificationIdentityService diversificationIdentityService;
+	@Autowired
+	EventsDAO eventsDAO;
 
-    @PostMapping("/search")
-    public String search(@ModelAttribute DiversificationRequest diversificationRequest, Model model) throws Exception {
-        if(StringUtils.isEmpty(diversificationRequest.getInputText())){
-            model.addAttribute("requestModel", diversificationRequest);
-            return "diversify";
-        }
-        String inputText = diversificationRequest.getInputText().replaceAll(" ", "+");
-        DiversificationResponse diversificationResponse = diversificationIdentityService.getDiversityResults(inputText);
+	@Autowired
+	DiversificationIdentityService diversificationIdentityService;
 
-        eventsDAO.recordEvents(diversificationRequest.getInputText(),
-                GSON.toJson(diversificationResponse));
+	@PostMapping("/search")
+	public String search(@ModelAttribute DiversificationRequest diversificationRequest, Model model) throws Exception {
+		if (StringUtils.isEmpty(diversificationRequest.getInputText())) {
+			model.addAttribute("requestModel", diversificationRequest);
+			return "diversify";
+		}
+		
+		try {
+			String inputText = diversificationRequest.getInputText().replaceAll(" ", "+");
+			DiversificationResponse diversificationResponse = diversificationIdentityService
+					.getDiversityResults(inputText);
 
-        model.addAttribute("requestModel", diversificationRequest);
-        model.addAttribute("responseModel", diversificationResponse);
-        return "diversify_result";
-    }
+			eventsDAO.recordEvents(diversificationRequest.getInputText(), GSON.toJson(diversificationResponse));
+
+			model.addAttribute("requestModel", diversificationRequest);
+			model.addAttribute("responseModel", diversificationResponse);
+			return "diversify_result";
+		} catch (Exception ex) {
+			LOG.error("error searching for the given input: " + diversificationRequest.getInputText(), ex);
+			return "error";
+		}
+	}
 
 }
