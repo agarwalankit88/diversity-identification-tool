@@ -1,0 +1,7 @@
+build/*
+*.lock
+*.bin
+*.probe
+.name
+.idea
+.gradle

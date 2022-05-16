@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+            integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
+            integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Diversification Identity Tool</title>
+</head>
+<body>
+<div style="background: #d71e28; height: 35px; border-bottom: 4px solid #ffcd41;">
+    <a href="/diversificationidentity/home">
+        <img src="https://www17.wellsfargomedia.com/assets/images/rwd/wf_logo_220x23.png"
+             style="margin: 5px;">
+    </a>
+</div>
+<div class="container mt-5">
+    <h2 align="center">Identify Diversity Owned/Led Businesses</h2>
+    <form style="text-align: center;" th:action="@{/search}" th:object="${requestModel}" method="post">
+        <input type="text" name="keyword" th:field="*{inputText}" placeholder="Find by leaders,buyers and offerings"
+               size="50">
+        <button type="submit" class="btn btn-info">Search</button>
+        <button onclick="window.location.href='/diversificationidentity/home'" type="reset" class="btn btn-info">Reset
+        </button>
+    </form>
+    <div th:if="! ${#strings.isEmpty(requestModel.inputText)}">
+        <table class="table table-bordered table-sm mt-2" >
+            <thead>
+            <tr>
+                <th>Snippet</th>
+                <th>Data</th>
+                <th>Source</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="l : ${responseModel.response}" th:field="${l}">
+                <td th:utext="${l.value.snippet}"></td>
+                <td>
+                    <table class="table table-bordered table-sm mt-2">
+                        <tbody>
+                        <tr th:each="ans : ${l.value.data}">
+                            <td th:utext="${ans}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td ><a th:href="${l.key}" th:text="${l.key}" target="_blank"/></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
