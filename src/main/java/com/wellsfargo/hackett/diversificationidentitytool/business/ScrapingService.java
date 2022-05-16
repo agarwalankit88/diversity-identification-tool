@@ -16,14 +16,17 @@ import java.util.regex.Pattern;
 @Service
 public class ScrapingService {
 
-    private static final List<String> leaderShipStandardKeywords = Arrays.asList("Leadership", "Executive", "CEO", "CTO", "Chief", "Directors", "Board");
+    private static final List<String> leaderShipStandardKeywords = Arrays.asList("Leadership", "Executive", "CEO", "CTO",
+            "Director", "Board of Directors", "Senior leadership", "Committees", "Governance");
+
+    private static final List<String> buyersStandardKeywords = Arrays.asList("Buyer", "Customer", "Client", "consumer");
 
     public DiversificationResponse scrapeSearchResults(BingWebSearchResponse bingWebSearchResponse) {
 
         DiversificationResponse response = new DiversificationResponse();
         Optional.ofNullable(bingWebSearchResponse).map(bingWebSearchResponse1 -> bingWebSearchResponse1.getWebPages().getValue())
                 .map(values -> {
-                    Map<String, SourceData> map = new TreeMap<>();
+                    Map<String, SourceData> map = new LinkedHashMap<>();
                     values.forEach(value -> map.put(value.getUrl(),
                             new SourceData(value.getSnippet(), scrapWebPage(value.getUrl(),
                                     bingWebSearchResponse.getQueryContext().getOriginalQuery()))));
@@ -35,29 +38,43 @@ public class ScrapingService {
 
     public List<String> scrapWebPage(String baseURL, String inputText) {
 
-        List<String> leadershipList = new ArrayList<>();
+        List<String> finalList = getFinalListOfStrings(inputText);
+        List<String> finalScrapedList = new ArrayList<>();
         Optional.ofNullable(baseURL).map(this::getDocument).ifPresent(document -> {
-            leaderShipStandardKeywords.stream().forEach(keyword -> {
+            finalList.stream().forEach(keyword -> {
                 Optional.ofNullable(getElements(document, keyword)).
-                        ifPresent(elements -> elements.stream().forEach(element -> leadershipList.add(element.html())));
+                        ifPresent(elements -> elements.stream().forEach(element -> finalScrapedList.add(element.html())));
             });
-            /*Optional.ofNullable(getElements(document, inputText)).
-                    ifPresent(elements -> elements.stream().forEach(element -> leadershipList.add(element.html())));*/
 
         });
 
-        /*Document document = getDocument(baseURL);
-        if (document != null) {
-            for (String keyword : standardKeywords) {
-                Elements elements = getElements(document, keyword);
-                if (elements != null) {
-                    for (Element element : elements) {
-                        leadershipList.add(element.html());
-                    }
-                }
+        return finalScrapedList;
+    }
+
+    private List<String> getFinalListOfStrings(String inputText) {
+
+        List<String> finalList = new ArrayList<>();
+
+        boolean lkw = false;
+        for (String key : leaderShipStandardKeywords) {
+            if (inputText.matches("^.*?((?i)" + key + ").*$")) {
+                lkw = true;
             }
-        }*/
-        return leadershipList;
+        }
+        if (lkw) {
+            finalList.addAll(leaderShipStandardKeywords);
+        }
+
+        boolean bkw = false;
+        for (String key : buyersStandardKeywords) {
+            if (inputText.matches("^.*?((?i)" + key + ").*$")) {
+                bkw = true;
+            }
+        }
+        if (bkw) {
+            finalList.addAll(buyersStandardKeywords);
+        }
+        return finalList;
     }
 
     private Document getDocument(String baseURL) {
