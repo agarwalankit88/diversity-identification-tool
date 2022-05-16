@@ -3,6 +3,7 @@ package com.wellsfargo.hackett.diversificationidentitytool.business;
 import com.wellsfargo.hackett.diversificationidentitytool.model.DiversificationResponse;
 import com.wellsfargo.hackett.diversificationidentitytool.model.SourceData;
 import com.wellsfargo.hackett.diversificationidentitytool.model.dto.BingWebSearchResponse;
+import me.xdrop.fuzzywuzzy.FuzzySearch;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -17,7 +18,7 @@ import java.util.regex.Pattern;
 public class ScrapingService {
 
     private static final List<String> leaderShipStandardKeywords = Arrays.asList("Leadership", "Executive", "CEO", "CTO",
-            "Director", "Board of Directors", "Senior leadership", "Committees", "Governance");
+            "Director", "Board of Directors", "Senior leadership", "Committees", "Governance", "management team", "executive team");
 
     private static final List<String> buyersStandardKeywords = Arrays.asList("Buyer", "Customer", "Client", "consumer");
 
@@ -61,14 +62,16 @@ public class ScrapingService {
         for (String input : inputArray
         ) {
             for (String key : leaderShipStandardKeywords) {
-                if (input.matches("^.*?((?i)" + key + ").*$")) {
+                int n = FuzzySearch.ratio(input, key);
+                if (n > 50) {
                     lkw = true;
                 }
             }
 
 
             for (String key : buyersStandardKeywords) {
-                if (input.matches("^.*?((?i)" + key + ").*$")) {
+                int n = FuzzySearch.ratio(input, key);
+                if (n > 50) {
                     bkw = true;
                 }
             }
