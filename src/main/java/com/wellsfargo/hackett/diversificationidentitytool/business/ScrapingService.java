@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 public class ScrapingService {
 
     private static final List<String> leaderShipStandardKeywords = Arrays.asList("Leadership", "Executive", "CEO", "CTO",
-            "Director", "Board of Directors", "Senior leadership", "Committees", "Governance");
+            "Director", "Board of Directors", "Senior leadership", "Committees", "Governance", "management team", "executive team");
 
     private static final List<String> buyersStandardKeywords = Arrays.asList("Buyer", "Customer", "Client", "consumer");
 
