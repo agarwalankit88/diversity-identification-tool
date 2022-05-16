@@ -54,22 +54,27 @@ public class ScrapingService {
     private List<String> getFinalListOfStrings(String inputText) {
 
         List<String> finalList = new ArrayList<>();
+        List<String> inputArray = List.of(inputText.split("\\+"));
 
         boolean lkw = false;
-        for (String key : leaderShipStandardKeywords) {
-            if (inputText.matches("^.*?((?i)" + key + ").*$")) {
-                lkw = true;
+        boolean bkw = false;
+        for (String input : inputArray
+        ) {
+            for (String key : leaderShipStandardKeywords) {
+                if (input.matches("^.*?((?i)" + key + ").*$")) {
+                    lkw = true;
+                }
+            }
+
+
+            for (String key : buyersStandardKeywords) {
+                if (input.matches("^.*?((?i)" + key + ").*$")) {
+                    bkw = true;
+                }
             }
         }
         if (lkw) {
             finalList.addAll(leaderShipStandardKeywords);
-        }
-
-        boolean bkw = false;
-        for (String key : buyersStandardKeywords) {
-            if (inputText.matches("^.*?((?i)" + key + ").*$")) {
-                bkw = true;
-            }
         }
         if (bkw) {
             finalList.addAll(buyersStandardKeywords);
